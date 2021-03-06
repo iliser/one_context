@@ -18,7 +18,11 @@ class MyApp extends StatelessWidget {
     // Reseting light theme
     if (OneContext.hasContext)
       OneContext().oneTheme.changeThemeData(
-          ThemeData(primarySwatch: Colors.green, brightness: Brightness.light));
+            ThemeData(
+              primarySwatch: Colors.green,
+              brightness: Brightness.light,
+            ),
+          );
   }
 
   @override
@@ -127,21 +131,23 @@ class _MyHomePage2State extends State<MyHomePage2> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            RaisedButton(
-                child: Text('COME BACK TO THE OLD APP'),
-                onPressed: () {
-                  OnePlatform.reboot(
-                    setUp: () {
-                      OneContext().key = GlobalKey<NavigatorState>();
-                    },
-                    builder: () => MyApp(),
-                  );
-                }),
-            RaisedButton(
-                child: Text('Navigate to Second Page'),
-                onPressed: () {
-                  OneContext().pushNamed('/second');
-                })
+            ElevatedButton(
+              child: Text('COME BACK TO THE OLD APP'),
+              onPressed: () {
+                OnePlatform.reboot(
+                  setUp: () {
+                    OneContext().key = GlobalKey<NavigatorState>();
+                  },
+                  builder: () => MyApp(),
+                );
+              },
+            ),
+            ElevatedButton(
+              child: Text('Navigate to Second Page'),
+              onPressed: () {
+                OneContext().pushNamed('/second');
+              },
+            )
           ],
         ),
       ),
@@ -206,33 +212,34 @@ class _MyHomePageState extends State<MyHomePage>
             mainAxisAlignment: MainAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              RaisedButton(
+              ElevatedButton(
                 child: Text(' Hard Reload'),
                 onPressed: () {
                   OneNotification.hardReloadRoot(context);
                 },
               ),
-              RaisedButton(
+              ElevatedButton(
                 child: Text('Soft Reeboot the app'),
                 onPressed: () {
                   OnePlatform.reboot(setUp: () => print('Reboot the app!'));
                 },
               ),
-              RaisedButton(
+              ElevatedButton(
                 child: Text('Hard Reeboot'),
                 onPressed: () {
                   OnePlatform.reboot(
-                      builder: () => MyApp(),
-                      setUp: () {
-                        print(
-                            '\n\nSetting debugShowCheckedModeBanner = true, so the debug banner should appear on the app right now.'
-                            '\n\n That is useful for load environment variables and project configuration before boot the app!'
-                            '\n And if you just need run some stuffs and reload the app without change it.');
-                        debugShowCheckedModeBanner = true;
-                      });
+                    builder: () => MyApp(),
+                    setUp: () {
+                      print(
+                          '\n\nSetting debugShowCheckedModeBanner = true, so the debug banner should appear on the app right now.'
+                          '\n\n That is useful for load environment variables and project configuration before boot the app!'
+                          '\n And if you just need run some stuffs and reload the app without change it.');
+                      debugShowCheckedModeBanner = true;
+                    },
+                  );
                 },
               ),
-              RaisedButton(
+              ElevatedButton(
                 child: Text('Load another app'),
                 onPressed: () {
                   OnePlatform.reboot(
@@ -242,7 +249,7 @@ class _MyHomePageState extends State<MyHomePage>
                       builder: () => MyApp2());
                 },
               ),
-              RaisedButton(
+              ElevatedButton(
                 child: Text('Change ThemeData Light'),
                 onPressed: () {
                   OneContext().oneTheme.changeThemeData(ThemeData(
@@ -250,7 +257,7 @@ class _MyHomePageState extends State<MyHomePage>
                       brightness: Brightness.light));
                 },
               ),
-              RaisedButton(
+              ElevatedButton(
                 child: Text('Change ThemeData Dark'),
                 onPressed: () {
                   OneContext().oneTheme.changeDarkThemeData(ThemeData(
@@ -258,94 +265,100 @@ class _MyHomePageState extends State<MyHomePage>
                       brightness: Brightness.dark));
                 },
               ),
-              RaisedButton(
+              ElevatedButton(
                 child: Text('Toggle ThemeMode (Dark/Light)'),
                 onPressed: () {
                   OneContext().oneTheme.toggleMode();
                 },
               ),
-              RaisedButton(
+              ElevatedButton(
                 child: Text('Change to english locale support'),
                 onPressed: () {
-                  OneNotification.notify<List<Locale>>(context,
-                      payload: NotificationPayload(data: [
-                        Locale('en', ''), // English
-                      ]));
+                  OneNotification.notify<List<Locale>>(
+                    context,
+                    payload: NotificationPayload(data: [
+                      Locale('en', ''), // English
+                    ]),
+                  );
                 },
               ),
-              RaisedButton(
+              ElevatedButton(
                 child: Text('Show SnackBar'),
                 onPressed: () {
                   showTipsOnScreen('OneContext().showSnackBar()');
                   OneContext()
                       .hideCurrentSnackBar(); // Dismiss snackbar before show another ;)
                   OneContext().showSnackBar(
-                      builder: (context) => SnackBar(
-                            content: Text(
-                              'My awesome snackBar!',
-                              textAlign: TextAlign.center,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .title
-                                  .copyWith(color: Colors.white),
-                            ),
-                            action: SnackBarAction(
-                                label: 'DISMISS', onPressed: () {}),
-                          ));
+                    builder: (context) => SnackBar(
+                      content: Text(
+                        'My awesome snackBar!',
+                        textAlign: TextAlign.center,
+                        style: Theme.of(context)
+                            .textTheme
+                            .headline6
+                            .copyWith(color: Colors.white),
+                      ),
+                      action: SnackBarAction(
+                        label: 'DISMISS',
+                        onPressed: () {},
+                      ),
+                    ),
+                  );
                 },
               ),
-              RaisedButton(
+              ElevatedButton(
                 child: Text('Show Dialog'),
                 onPressed: () async {
                   showTipsOnScreen('OneContext().showDialog<String>()');
 
-                  var result = await OneContext().showDialog<String>(
-                      // Don't need context to show alertDialog
-                      builder: (context) => AlertDialog(
-                            title: new Text("The Title"),
-                            content: new Text("The Body"),
-                            actions: <Widget>[
-                              new FlatButton(
-                                  child: new Text("OK"),
-                                  onPressed: () =>
-                                      OneContext().popDialog('ok')),
-                              new FlatButton(
-                                  child: new Text("CANCEL"),
-                                  onPressed: () =>
-                                      OneContext().popDialog('cancel')),
-                            ],
-                          ));
+                  final result = await OneContext().showDialog<String>(
+                    // Don't need context to show alertDialog
+                    builder: (context) => AlertDialog(
+                      title: Text("The Title"),
+                      content: Text("The Body"),
+                      actions: <Widget>[
+                        TextButton(
+                          child: Text("OK"),
+                          onPressed: () => OneContext().popDialog('ok'),
+                        ),
+                        TextButton(
+                          child: Text("CANCEL"),
+                          onPressed: () => OneContext().popDialog('cancel'),
+                        ),
+                      ],
+                    ),
+                  );
                   print(result);
                 },
               ),
-              RaisedButton(
+              ElevatedButton(
                 child: Text('Show modalBottomSheet'),
                 onPressed: () async {
                   showTipsOnScreen(
                       'OneContext().showModalBottomSheet<String>()');
-                  var result = await OneContext().showModalBottomSheet<String>(
-                      builder: (context) => Container(
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: <Widget>[
-                                ListTile(
-                                    leading: Icon(Icons.music_note),
-                                    title: Text('Music'),
-                                    onTap: () =>
-                                        OneContext().popDialog('Music')),
-                                ListTile(
-                                    leading: Icon(Icons.videocam),
-                                    title: Text('Video'),
-                                    onTap: () =>
-                                        OneContext().popDialog('Video')),
-                                SizedBox(height: 45)
-                              ],
-                            ),
-                          ));
+                  final result =
+                      await OneContext().showModalBottomSheet<String>(
+                    builder: (context) => Container(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          ListTile(
+                              leading: Icon(Icons.music_note),
+                              title: Text('Music'),
+                              onTap: () => OneContext().popDialog('Music')),
+                          ListTile(
+                              leading: Icon(Icons.videocam),
+                              title: Text('Video'),
+                              onTap: () => OneContext().popDialog('Video')),
+                          SizedBox(height: 45)
+                        ],
+                      ),
+                    ),
+                  );
                   print(result);
                 },
               ),
-              RaisedButton(
+              ElevatedButton(
                 child: Text('Show bottomSheet'),
                 onPressed: () {
                   showTipsOnScreen('OneContext().showBottomSheet()');
@@ -359,51 +372,53 @@ class _MyHomePageState extends State<MyHomePage>
                       alignment: Alignment.topCenter,
                       height: 200,
                       child: IconButton(
-                          icon: Icon(Icons.arrow_drop_down),
-                          iconSize: 50,
-                          color: Colors.white,
-                          onPressed: () => OneContext().popDialog()),
+                        icon: Icon(Icons.arrow_drop_down),
+                        iconSize: 50,
+                        color: Colors.white,
+                        onPressed: () => OneContext().popDialog(),
+                      ),
                     ),
                   );
                 },
               ),
-              RaisedButton(
-                  child: Text('Show and block till input'),
-                  onPressed: () async {
-                    showTipsOnScreen('OneContext().showDialog<int>()');
-                    switch (await OneContext().showDialog<int>(
-                        barrierDismissible: false,
-                        builder: (BuildContext context) {
-                          return SimpleDialog(
-                            shape: RoundedRectangleBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10))),
-                            title: const Text('Select assignment'),
-                            children: <Widget>[
-                              SimpleDialogOption(
-                                onPressed: () {
-                                  OneContext().popDialog(1);
-                                },
-                                child: const Text('Number 1'),
-                              ),
-                              SimpleDialogOption(
-                                onPressed: () {
-                                  OneContext().popDialog(2);
-                                },
-                                child: const Text('Number 2'),
-                              ),
-                            ],
-                          );
-                        })) {
-                      case 1:
-                        print('number one');
-                        break;
-                      case 2:
-                        print('number two');
-                        break;
-                    }
-                  }),
-              RaisedButton(
+              ElevatedButton(
+                child: Text('Show and block till input'),
+                onPressed: () async {
+                  showTipsOnScreen('OneContext().showDialog<int>()');
+                  switch (await OneContext().showDialog<int>(
+                      barrierDismissible: false,
+                      builder: (BuildContext context) {
+                        return SimpleDialog(
+                          shape: RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10))),
+                          title: const Text('Select assignment'),
+                          children: <Widget>[
+                            SimpleDialogOption(
+                              onPressed: () {
+                                OneContext().popDialog(1);
+                              },
+                              child: const Text('Number 1'),
+                            ),
+                            SimpleDialogOption(
+                              onPressed: () {
+                                OneContext().popDialog(2);
+                              },
+                              child: const Text('Number 2'),
+                            ),
+                          ],
+                        );
+                      })) {
+                    case 1:
+                      print('number one');
+                      break;
+                    case 2:
+                      print('number two');
+                      break;
+                  }
+                },
+              ),
+              ElevatedButton(
                 child: Text('Show default progress indicator'),
                 onPressed: () {
                   showTipsOnScreen('OneContext().showProgressIndicator()');
@@ -413,7 +428,7 @@ class _MyHomePageState extends State<MyHomePage>
                       () => OneContext().hideProgressIndicator());
                 },
               ),
-              RaisedButton(
+              ElevatedButton(
                 child: Text('Show progress indicator colored'),
                 onPressed: () {
                   showTipsOnScreen(
@@ -425,7 +440,7 @@ class _MyHomePageState extends State<MyHomePage>
                       () => OneContext().hideProgressIndicator());
                 },
               ),
-              RaisedButton(
+              ElevatedButton(
                 child: Text('Show custom progress indicator'),
                 onPressed: () {
                   showTipsOnScreen(
@@ -449,7 +464,7 @@ class _MyHomePageState extends State<MyHomePage>
                       () => OneContext().hideProgressIndicator());
                 },
               ),
-              RaisedButton(
+              ElevatedButton(
                 child: Text('Show custom animated indicator'),
                 onPressed: () {
                   showTipsOnScreen(
@@ -480,7 +495,7 @@ class _MyHomePageState extends State<MyHomePage>
                   });
                 },
               ),
-              RaisedButton(
+              ElevatedButton(
                 child: Text('Add a generic overlay'),
                 onPressed: () {
                   showTipsOnScreen('OneContext().addOverlay(builder)');
@@ -494,39 +509,48 @@ class _MyHomePageState extends State<MyHomePage>
                       .toDouble();
                   randomOffset.putIfAbsent(
                       overId, () => Offset(getX(), getY()));
-                  Widget w = RaisedButton(
-                      child: Text(
-                        'CLOSE OR DRAG',
-                        style: TextStyle(color: Colors.white),
+                  Widget w = ElevatedButton(
+                    style: ButtonStyle(
+                      // WARN need to check how raised button color works
+                      backgroundColor: MaterialStateProperty.all<Color>(
+                        Colors.blue,
                       ),
-                      color: Colors.blue,
-                      onPressed: () {
-                        OneContext().removeOverlay(overId);
-                      });
+                    ),
+                    child: Text(
+                      'CLOSE OR DRAG',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    onPressed: () {
+                      OneContext().removeOverlay(overId);
+                    },
+                  );
                   OneContext().addOverlay(
-                      builder: (_) => Positioned(
-                          top: randomOffset[overId].dy,
-                          left: randomOffset[overId].dx,
-                          child: Draggable(
-                            onDragEnd: (DraggableDetails detail) =>
-                                randomOffset[overId] = detail.offset,
-                            childWhenDragging: Container(),
-                            child: w,
-                            feedback: w,
-                          )),
-                      overlayId: overId);
+                    builder: (_) => Positioned(
+                      top: randomOffset[overId].dy,
+                      left: randomOffset[overId].dx,
+                      child: Draggable(
+                        onDragEnd: (DraggableDetails detail) =>
+                            randomOffset[overId] = detail.offset,
+                        childWhenDragging: Container(),
+                        child: w,
+                        feedback: w,
+                      ),
+                    ),
+                    overlayId: overId,
+                  );
                 },
               ),
-              RaisedButton(
+              ElevatedButton(
                 child: Text('Push a second page (push)'),
                 onPressed: () async {
                   showTipsOnScreen('OneContext().push()');
                   String result = await OneContext().push<String>(
-                      MaterialPageRoute(builder: (_) => SecondPage()));
+                    MaterialPageRoute(builder: (_) => SecondPage()),
+                  );
                   print('$result from OneContext().push()');
                 },
               ),
-              RaisedButton(
+              ElevatedButton(
                 child: Text('Push a second page (pushNamed)'),
                 onPressed: () async {
                   showTipsOnScreen('OneContext().pushNamed()');
@@ -534,7 +558,7 @@ class _MyHomePageState extends State<MyHomePage>
                   print('$result from OneContext().pushNamed()');
                 },
               ),
-              RaisedButton(
+              ElevatedButton(
                 child: Text('Show MediaQuery info'),
                 onPressed: () async {
                   MediaQueryData mediaQuery = OneContext().mediaQuery;
@@ -549,14 +573,14 @@ class _MyHomePageState extends State<MyHomePage>
                   showTipsOnScreen(info, size: 200, seconds: 5);
                 },
               ),
-              RaisedButton(
+              ElevatedButton(
                 child: Text('Show Theme info'),
                 onPressed: () async {
                   ThemeData theme = OneContext().theme;
                   String info = 'platform: ${theme.platform}\n'
                       'primaryColor: ${theme.primaryColor}\n'
                       'accentColor: ${theme.accentColor}\n'
-                      'title.color: ${theme.textTheme.title.color}';
+                      'title.color: ${theme.textTheme.headline6.color}';
                   print(info);
                   showTipsOnScreen(info, size: 200, seconds: 5);
                 },
@@ -574,18 +598,24 @@ class SecondPage extends StatelessWidget {
   SecondPage() {
     OneContext()
         .showDialog(
-            builder: (_) => AlertDialog(
-                  content: Text(
-                      'Dialog opened from constructor of StatelessWidget SecondPage!'),
-                  actions: [
-                    RaisedButton(
-                        color: OneContext().theme.primaryColor,
-                        child: Text('Close'),
-                        onPressed: () {
-                          OneContext().popDialog("Nice!");
-                        })
-                  ],
-                ))
+          builder: (_) => AlertDialog(
+            content: Text(
+                'Dialog opened from constructor of StatelessWidget SecondPage!'),
+            actions: [
+              ElevatedButton(
+                  style: ButtonStyle(
+                    // WARN need to check how raised button color works
+                    backgroundColor: MaterialStateProperty.all<Color>(
+                      OneContext().theme.primaryColor,
+                    ),
+                  ),
+                  child: Text('Close'),
+                  onPressed: () {
+                    OneContext().popDialog("Nice!");
+                  })
+            ],
+          ),
+        )
         .then((result) => print(result));
   }
 
@@ -593,21 +623,23 @@ class SecondPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-      appBar: AppBar(),
-      body: Center(
+        appBar: AppBar(),
+        body: Center(
           child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Text('Second Page'),
-          RaisedButton(
-            child: Text('Go Back - pop("success")'),
-            onPressed: () {
-              // showTipsOnScreen('OneContext().pop("success")');
-              OneContext().pop('success');
-            },
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text('Second Page'),
+              ElevatedButton(
+                child: Text('Go Back - pop("success")'),
+                onPressed: () {
+                  // showTipsOnScreen('OneContext().pop("success")');
+                  OneContext().pop('success');
+                },
+              ),
+            ],
           ),
-        ],
-      )));
+        ),
+      );
 }
 
 // Dont need context, so features can be create in any place ;)
@@ -618,19 +650,20 @@ void showTipsOnScreen(String text, {double size, int seconds}) {
     builder: (_) => Align(
       alignment: Alignment.topCenter,
       child: Container(
-          alignment: Alignment.bottomCenter,
-          padding: EdgeInsets.symmetric(
-              horizontal: kFloatingActionButtonMargin, vertical: 8),
-          child: FlatButton(
-            onPressed: null,
-            child: Text(
-              text,
-              style: TextStyle(color: Colors.white, fontSize: 16),
-            ),
+        alignment: Alignment.bottomCenter,
+        padding: EdgeInsets.symmetric(
+            horizontal: kFloatingActionButtonMargin, vertical: 8),
+        child: TextButton(
+          onPressed: null,
+          child: Text(
+            text,
+            style: TextStyle(color: Colors.white, fontSize: 16),
           ),
-          color: Colors.red,
-          height: size ?? 100,
-          width: double.infinity),
+        ),
+        color: Colors.red,
+        height: size ?? 100,
+        width: double.infinity,
+      ),
     ),
   );
   Future.delayed(
