@@ -105,7 +105,7 @@ class OneContext with NavigatorController, OverlayController, DialogController {
   /// ```
   Widget builder(
     BuildContext context,
-    Widget widget, {
+    Widget? widget, {
     Key? key,
     MediaQueryData? mediaQueryData,
     String? initialRoute,
